@@ -44,7 +44,7 @@ compileTestKotlin {
 task installDependencies(type: YarnTask) {
 	args = ['install']
 	execOverrides {
-		it.workingDir = './javascript/web'
+		it.workingDir = './parcel-react'
 	}
 }
 
@@ -52,7 +52,7 @@ task installDependencies(type: YarnTask) {
 task buildWeb(type: YarnTask) {
 	args = ['build']
 	execOverrides {
-		it.workingDir = './javascript/web'
+		it.workingDir = './parcel-react'
 	}
 }
 
