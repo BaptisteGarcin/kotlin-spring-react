@@ -54,6 +54,7 @@ task buildWeb(type: YarnTask) {
 	execOverrides {
 		it.workingDir = './parcel-react'
 	}
+	System.setProperty('spring.deploy', "prod")
 }
 
 // Before buildWeb can run, installDependencies must run
