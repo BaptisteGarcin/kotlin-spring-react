@@ -8,12 +8,16 @@ import org.springframework.web.bind.annotation.GetMapping
 class KontrollerHtm {
 
 
-    @GetMapping("/htmlpage")
+    @GetMapping("")
     fun blog(model: Model): String {
         println("te")
         return "exampleTest"
     }
 
+    @GetMapping("/react")
+    fun react(model: Model): String {
+        return "index"
+    }
 
 
 }
