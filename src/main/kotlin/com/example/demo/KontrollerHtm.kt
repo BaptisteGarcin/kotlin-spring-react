@@ -5,6 +5,8 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.ui.set
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.ModelAttribute
+import org.springframework.web.bind.annotation.PostMapping
 
 @Controller
 class KontrollerHtm {
@@ -18,14 +20,17 @@ class KontrollerHtm {
         return "exampleTest"
     }
 
-    @GetMapping("/react")
-    fun react(model: Model): String {
-        println("mode $mode")
-        if (mode == "prod")
-            model["publicUrl"] = ""
-        else
-            model["publicUrl"] = "http://localhost:1234"
-        return "react"
+    @PostMapping("/login")
+    fun login(@ModelAttribute("uname") uname: String,
+              @ModelAttribute("psw") psw: String, model: Model): String {
+        if (uname == "admin" && psw == "admin") {
+            if (mode == "prod")
+                model["publicUrl"] = ""
+            else
+                model["publicUrl"] = "http://localhost:1234"
+            return "react"
+        }
+        return "error"
     }
 
 
