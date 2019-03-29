@@ -14,6 +14,9 @@ class KontrollerHtm {
     @Value("\${app.mode}")
     lateinit var mode: String
 
+    @Value("\${app.devurl}")
+    lateinit var devurl: String
+
     @GetMapping("")
     fun blog(model: Model): String {
         println("te")
@@ -24,10 +27,10 @@ class KontrollerHtm {
     fun login(@ModelAttribute("uname") uname: String,
               @ModelAttribute("psw") psw: String, model: Model): String {
         if (uname == "admin" && psw == "admin") {
-            if (mode == "prod")
-                model["publicUrl"] = ""
+            if (mode == "dev")
+                model["publicUrl"] = devurl
             else
-                model["publicUrl"] = "http://localhost:1234"
+                model["publicUrl"] = ""
             return "react"
         }
         return "error"
