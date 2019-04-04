@@ -44,8 +44,7 @@ public class GreetingController {
                         equal(RecordFieldsEnum.PARENT_TYPE.getCode(), ModuleEnum.CONTACT.getCode())));
 
         sugarSearchService.filter(callQuery)
-                .forEach(sugarRecord -> System.out.println("callQuery" + sugarRecord));
-
+                .forEach(sugarRecord -> System.out.println("sugarRecord" + sugarRecord));
 
     }
 }
