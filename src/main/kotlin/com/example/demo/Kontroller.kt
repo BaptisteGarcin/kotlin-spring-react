@@ -2,14 +2,13 @@ package com.example.demo
 
 
 import com.altima.api.sugar.enums.ModuleEnum
-import com.altima.api.sugar.enums.RecordFieldsEnum
 import com.altima.api.sugar.models.SugarRecord
 import com.altima.api.sugar.service.ISugarSearchService
-import com.altima.api.sugar.service.query.api.SugarFilterApi.and
-import com.altima.api.sugar.service.query.api.SugarFilterApi.equal
 import com.altima.api.sugar.service.query.api.SugarQueryApi.module
+import org.reactivecouchbase.json.Json
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
+import java.util.concurrent.TimeUnit
 
 @RestController
 class Kontroller(private var sugarSearchService: ISugarSearchService) {
@@ -29,10 +28,11 @@ class Kontroller(private var sugarSearchService: ISugarSearchService) {
         println("sugar")
         // TODO : Get consents from sugar CRM
         val callQuery = module(ModuleEnum.CONTACT)
-                .withFilter(and(
-                        equal(RecordFieldsEnum.PARENT_TYPE.code, ModuleEnum.CONTACT.code)))
 
-        sugarSearchService.filter<SugarRecord>(callQuery).forEach { sugarRecord -> println("sugarRecord: $sugarRecord") }
+        sugarSearchService.filter<SugarRecord>(callQuery)
+                .onBackpressureBuffer()
+                .timeout(60000, TimeUnit.MILLISECONDS)
+                .forEach { sugarRecord -> println("sugarRecord: ${Json.toJson(sugarRecord).stringify()}") }
     }
 }
 
