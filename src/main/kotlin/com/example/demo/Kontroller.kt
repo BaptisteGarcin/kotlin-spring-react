@@ -18,7 +18,7 @@ class Kontroller {
         return mutableListOf(Class("hellho go"), Class("hello"))
     }
 
-    @GetMapping("/sugar")
+    @GetMapping("/consents")
     fun sugar() {
         println("sugar")
         // TODO : Get consents from sugar CRM

@@ -32,6 +32,8 @@ altimaApi {
 dependencies {
 	compile platform('altima-api:dependencies:3.1.0')
 	compile('altima-api:sugar:5.1.0')
+	compile('altima-api:bootable:6.3.0')
+	implementation('altima-api:tools-config:6.2.0')
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-mustache'
 	implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
@@ -39,6 +41,8 @@ dependencies {
 	implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
     runtimeOnly("org.springframework.boot:spring-boot-devtools")
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	runtime 'com.zaxxer:HikariCP'
+	runtime 'org.postgresql:postgresql'
 }
 
 compileKotlin {

@@ -1,4 +1,4 @@
-package com.example.demo
+package com.altima.api.demo
 
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory
 import org.springframework.boot.web.server.ErrorPage
