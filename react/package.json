@@ -4,7 +4,7 @@
   "description": "parcel react",
   "main": "index.js",
   "scripts": {
-    "start": "parcel serve ./src/index.js --open --out-dir ../src/main/resources/static",
+    "start": "parcel serve ./src/index.js --out-dir ../src/main/resources/static",
     "build": "parcel build ./src/index.js --out-dir ../src/main/resources/static"
   },
   "keywords": [

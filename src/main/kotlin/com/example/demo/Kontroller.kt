@@ -1,5 +1,6 @@
 package com.example.demo
 
+
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
 
@@ -15,6 +16,12 @@ class Kontroller {
     @GetMapping("/list")
     fun list(): MutableList<Class> {
         return mutableListOf(Class("hellho go"), Class("hello"))
+    }
+
+    @GetMapping("/sugar")
+    fun sugar() {
+        println("sugar")
+        // TODO : Get consents from sugar CRM
     }
 }
 
