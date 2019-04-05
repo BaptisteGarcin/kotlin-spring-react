@@ -6,15 +6,27 @@ import com.altima.api.sugar.models.SugarContact
 import com.altima.api.sugar.models.SugarRecord
 import com.altima.api.sugar.service.ISugarSearchService
 import com.altima.api.sugar.service.query.api.SugarQueryApi.module
+import okhttp3.MediaType
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody
 import org.reactivecouchbase.json.Json
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
 import rx.Observable
 import java.util.concurrent.TimeUnit
 import javax.servlet.http.HttpServletResponse
 
+
 @RestController
 class Kontroller(private var sugarSearchService: ISugarSearchService) {
+    @Value("\${app.nio-client-id}")
+    lateinit var nio_client_id: String
+
+    @Value("\${app.nio-client-secret}")
+    lateinit var nio_client_secret: String
 
     @GetMapping("/test")
     fun test() =
@@ -59,24 +71,67 @@ class Kontroller(private var sugarSearchService: ISugarSearchService) {
     }
 
     @GetMapping("/consentsthree")
-    fun consentsthree(): Observable<MutableList<ConsentDto>>? {
+    fun consentsthree(): Observable<ResponseEntity<MutableList<ConsentNio>>>? {
         println("consents")
         // TODO : Get consents from sugar CRM
         val callQuery = module(ModuleEnum.CONTACT)
-        //val mutableList: MutableList<SugarContact>
         return sugarSearchService.filter<SugarContact>(callQuery)
                 .onBackpressureBuffer()
-                .timeout(120, TimeUnit.SECONDS)
+                // It happens often to get Read Timed out error
+                .timeout(260, TimeUnit.SECONDS)
                 .map { contact: SugarContact? ->
-                    ConsentDto(
-                            id = contact?.id ?: "",
+                    ConsentNio(
+                            userId = contact?.id ?: "",
                             name = contact?.name ?: "",
-                            mailConsent = contact?.isRefusSollicitMailCourrier ?: false,
-                            phoneConsent = contact?.isRefusSollicitTel ?: false
+                            doneBy = DoneBy(
+                                    userId = "",
+                                    role = ""
+                            ),
+                            version = 1,
+                            groups = listOf(
+                                    Groups(
+                                            key = "grp1",
+                                            label = "J'accepte de recevoir les offres personnalisées",
+                                            consents = listOf(
+                                                    Consents(
+                                                            key = "phone",
+                                                            label = "Par téléphone",
+                                                            checked = contact?.isRefusSollicitTel ?: false
+                                                    ),
+                                                    Consents(
+                                                            key = "email",
+                                                            label = "Par e-mail",
+                                                            checked = contact?.isRefusSollicitMailCourrier ?: false
+                                                    ))
+                                    )
+                            )
                     )
-                }.toList()
+                }
+                .doOnNext { importToNio(it) }
+                .toList()
+                .map { ResponseEntity.ok(it) }
+                .doOnTerminate {
+                    println("terminated")
+                }
     }
 
+    fun importToNio(consentNio: ConsentNio) {
+        val client = OkHttpClient()
+
+        val mediaType = MediaType.parse("application/json")
+        val body = RequestBody.create(mediaType, Json.toJson(consentNio).stringify())
+        val request = Request.Builder()
+                .url("http://localhost:9000/api/dev/organisations/Altima/users/${consentNio.userId}")
+                .put(body)
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
+                .addHeader("Nio-Client-Id", nio_client_id)
+                .addHeader("Nio-Client-Secret", nio_client_secret)
+                .build()
+
+        val response = client.newCall(request).execute()
+        println(response)
+    }
 
 }
 
