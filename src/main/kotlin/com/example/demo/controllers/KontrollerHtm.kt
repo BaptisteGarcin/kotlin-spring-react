@@ -18,9 +18,8 @@ class KontrollerHtm {
     lateinit var devurl: String
 
     @GetMapping("")
-    fun blog(model: Model): String {
-        println("te")
-        return "exampleTest"
+    fun login(model: Model): String {
+        return "login"
     }
 
     @PostMapping("/login")
