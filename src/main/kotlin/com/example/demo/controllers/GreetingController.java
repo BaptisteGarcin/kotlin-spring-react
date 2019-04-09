@@ -1,9 +1,10 @@
-package com.example.demo;
+package com.example.demo.controllers;
 
 
 import com.altima.api.sugar.enums.ModuleEnum;
 import com.altima.api.sugar.service.ISugarSearchService;
 import com.altima.api.sugar.service.query.SugarQuery;
+import com.example.demo.models.Greeting;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,10 +19,9 @@ import static com.altima.api.sugar.service.query.api.SugarQueryApi.module;
 public class GreetingController {
 
 
-    private ISugarSearchService sugarSearchService;
-
     private static final String template = "Hello, %s!";
     private final AtomicLong counter = new AtomicLong();
+    private ISugarSearchService sugarSearchService;
 
     @Autowired
     GreetingController(ISugarSearchService sugarSearchService) {

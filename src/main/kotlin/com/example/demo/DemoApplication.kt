@@ -1,6 +1,7 @@
 package com.example.demo
 
 import com.altima.api.bootable.FullStackConfiguration
+//import com.altima.api.mail.MailConfiguration
 import com.altima.api.sugar.SugarConfiguration
 import com.altima.api.tools.config.ConfigurationsBuilder
 import com.altima.api.tools.config.IConfigurations
@@ -27,6 +28,7 @@ import javax.sql.DataSource
     SugarConfiguration::class,
     FullStackConfiguration::class,
     ConfigServiceConfiguration::class
+    //MailConfiguration::class
 ])
 
 class DemoApplication {

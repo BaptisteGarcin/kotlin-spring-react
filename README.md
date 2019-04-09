@@ -1,5 +1,8 @@
 Launch in dev
 
+Set environment variables
+```mode=dev```
+
 In one terminal 
 ```cd parcel-react```
 ```yarn install```

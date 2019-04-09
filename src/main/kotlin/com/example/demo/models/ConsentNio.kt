@@ -1,4 +1,4 @@
-package com.example.demo
+package com.example.demo.models
 
 data class DoneBy(
         val userId: String,
