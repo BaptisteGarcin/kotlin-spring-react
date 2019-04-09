@@ -38,7 +38,6 @@ class Kontroller(private var sugarSearchService: ISugarSearchService
 
     @GetMapping("/list")
     fun list(): MutableList<Class> {
-        gdprDeleteContact("baptiste.garcin@outlook.fr")
         return mutableListOf(Class("hellho go"), Class("hello"))
     }
 
@@ -60,6 +59,7 @@ class Kontroller(private var sugarSearchService: ISugarSearchService
     fun consentsthree(): Observable<ResponseEntity<MutableList<ConsentNio>>>? {
         println("consents")
         // TODO : Get consents from sugar CRM
+        // FIXME:  Request to sugar sometimes fail with java.lang.IllegalStateException: getOutputStream() has already been called for this response
         val callQuery = module(ModuleEnum.CONTACT)
         return sugarSearchService.filter<SugarContact>(callQuery)
                 .onBackpressureBuffer()
